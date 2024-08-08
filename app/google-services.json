@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "610251104263",
+    "project_id": "e-commerce-5ecab",
+    "storage_bucket": "e-commerce-5ecab.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:610251104263:android:4c897900d1a4dea0678aa2",
+        "android_client_info": {
+          "package_name": "com.training.ecommerce"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDr4eAN3y5M3bC9kSGwY0JjtRJFqA6uXaQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

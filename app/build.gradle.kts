@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -44,7 +46,15 @@ dependencies {
 
     //splash screen
     implementation("androidx.core:core-splashscreen:1.0.0")
-
+    // Import the Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+    // TODO: Add the dependencies for Firebase products you want to use
+    // When using the BoM, don't specify versions in Firebase dependencies
+    implementation("com.google.firebase:firebase-analytics")
+    // Add the dependencies for the Crashlytics and Analytics libraries
+    implementation("com.google.firebase:firebase-crashlytics")
+    //third party lib
+    implementation("com.github.pwittchen:reactivenetwork-rx2:3.0.8")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
