@@ -5,7 +5,6 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnticipateInterpolator
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -15,9 +14,6 @@ class MainActivity : AppCompatActivity() {
         initialSplashScreen()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        findViewById<TextView>(R.id.text).setOnClickListener {
-            throw RuntimeException("Test Crash") // Force a crash
-        }
     }
 
     private fun initialSplashScreen() {
