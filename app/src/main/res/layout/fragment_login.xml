@@ -39,7 +39,7 @@
                 style="@style/messageTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 android:text="@string/sign_in_msg" />
 
             <androidx.appcompat.widget.AppCompatEditText
