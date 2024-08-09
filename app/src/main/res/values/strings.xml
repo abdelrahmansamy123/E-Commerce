@@ -2,4 +2,15 @@
     <string name="app_name">E-Commerce</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="auth_welcome_msg">Welcome to E-Commerce</string>
+    <string name="sign_in_msg">Sign in to continue</string>
+    <string name="email_edt_hint">Your Email</string>
+    <string name="password_edt_hint">Your Password</string>
+    <string name="btn_login">Sign In</string>
+    <string name="or">OR</string>
+    <string name="btn_google">Login with Google</string>
+    <string name="btn_facebook">Login with facebook</string>
+    <string name="btn_forgetPassword">Forgot Password?</string>
+    <string name="have_a_account_msg">Don’t have a account?</string>
+    <string name="register">Register</string>
 </resources>
