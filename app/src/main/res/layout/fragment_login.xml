@@ -57,10 +57,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="8dp"
-                android:drawableStart="@drawable/ic_password"
+                android:drawableStart="@drawable/password_ic"
                 android:hint="@string/password_edt_hint" />
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/login_btn"
                 style="@style/PrimaryButtonStyle"
                 android:layout_marginTop="16dp"
                 android:text="@string/btn_login"
