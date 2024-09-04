@@ -1,6 +1,5 @@
 package com.training.ecommerce.ui.auth.viewModel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -9,19 +8,23 @@ import com.training.ecommerce.data.repository.auth.FirebaseAuthRepository
 import com.training.ecommerce.data.repository.user.UserPreferencesRepository
 import com.training.ecommerce.utils.isValidEmail
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
-    val userPrefs: UserPreferencesRepository, val authFirebaseAuthRepository: FirebaseAuthRepository
+    val userPrefs: UserPreferencesRepository,
+    val authFirebaseAuthRepository: FirebaseAuthRepository
 ) : ViewModel() {
 
-    val loginState: MutableStateFlow<Resource<String>?> = MutableStateFlow(null)
+    private val _loginState = MutableSharedFlow<Resource<String>>()
+    val loginState: SharedFlow<Resource<String>> = _loginState.asSharedFlow()
 
     val email = MutableStateFlow("")
     val password = MutableStateFlow("")
@@ -42,27 +45,32 @@ class LoginViewModel(
             if (isLoginIsValid.first()) {
                 authFirebaseAuthRepository.loginWithEmailAndPassword(email, password)
                     .onEach { resource ->
-                        Log.d(TAG, "Emitted resource: $resource")
-
                         when (resource) {
-                            is Resource.Loading -> loginState.update { Resource.Loading() }
                             is Resource.Success -> {
-//                                userPrefs.saveUSerEmail(email)
-                                loginState.update {
-                                    Resource.Success(
-                                        resource.data ?: "Empty User ID"
-                                    )
-                                }
+
+                                _loginState.emit(Resource.Success(resource.data ?: "Empty User ID"))
                             }
 
-                            is Resource.Error -> loginState.value =
-                                Resource.Error(resource.exception ?: Exception("Unknown Error"))
+                            else -> _loginState.emit(resource)
                         }
                     }.launchIn(viewModelScope)
             } else {
-                loginState.update { Resource.Error(Exception("Invalid email or password ")) }
+                _loginState.emit(Resource.Error(Exception("Invalid email or password")))
             }
         }
+    }
+
+    fun loginWithGoogle(idToken: String) = viewModelScope.launch {
+        authFirebaseAuthRepository.loginWithGoogle(idToken).onEach { res ->
+            when (res) {
+                is Resource.Success -> {
+                    _loginState.emit(Resource.Success(res.data ?: "Empty User ID"))
+                }
+
+                else -> _loginState.emit(res)
+            }
+        }.launchIn(viewModelScope)
+
     }
 }
 
@@ -79,3 +87,4 @@ class LoginViewModelFactory(
         throw IllegalAccessException("Unknown viewModel class ")
     }
 }
+

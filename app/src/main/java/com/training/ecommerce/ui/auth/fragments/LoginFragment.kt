@@ -15,8 +15,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
 import com.training.ecommerce.BuildConfig
 import com.training.ecommerce.R
 import com.training.ecommerce.data.dataSource.dataStore.UserPreferencesDataSource
@@ -118,22 +116,15 @@ class LoginFragment : Fragment() {
 
 
     private fun firebaseAuthWithGoogle(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        FirebaseAuth.getInstance().signInWithCredential(credential)
-            .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful) {
-                    //SignIn is success,
-                    val email = task.result.user?.email
-
-                }
-            }
+        loginViewModel.loginWithGoogle(idToken)
     }
+
 
     private fun initViewModel() {
         lifecycleScope.launch {
             loginViewModel.loginState.collect { state ->
 
-                state?.let {
+                state.let {
                     when (it) {
                         is Resource.Loading -> {
                             progressDialog.show()
@@ -141,6 +132,7 @@ class LoginFragment : Fragment() {
 
                         is Resource.Success -> {
                             progressDialog.dismiss()
+
                         }
 
                         is Resource.Error -> {
@@ -151,8 +143,6 @@ class LoginFragment : Fragment() {
                             )
                             logAuthIssueToCrashlytics(msg, "Login Error")
                         }
-
-                        else -> {}
                     }
                 }
             }
