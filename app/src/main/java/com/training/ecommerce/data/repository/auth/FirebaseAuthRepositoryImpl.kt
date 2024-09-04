@@ -1,8 +1,8 @@
 package com.training.ecommerce.data.repository.auth
 
 
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.training.ecommerce.data.models.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -19,7 +19,6 @@ class FirebaseAuthRepositoryImpl(private val auth: FirebaseAuth = FirebaseAuth.g
             //suspends the coroutines until the task is complete
             val authResult = auth.signInWithEmailAndPassword(email, password).await()
             authResult.user?.let { user ->
-                Log.d(TAG, "loginWithEmailAndPassword: ${user.uid}")
                 emit(Resource.Success(user.uid)) // Emit the result
             } ?: run {
                 emit(Resource.Error(Exception("User not found")))
@@ -28,6 +27,21 @@ class FirebaseAuthRepositoryImpl(private val auth: FirebaseAuth = FirebaseAuth.g
             emit(Resource.Error(e))
         }
 
+    }
+
+    override suspend fun loginWithGoogle(idToken: String): Flow<Resource<String>> = flow {
+        try {
+            emit(Resource.Loading())
+            val credential = GoogleAuthProvider.getCredential(idToken, null)
+            val authResult = auth.signInWithCredential(credential).await()
+            authResult.user?.let { user ->
+                emit(Resource.Success(user.uid))
+            } ?: run {
+                emit(Resource.Error(Exception("User Not Found")))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e))
+        }
     }
 
     companion object {
