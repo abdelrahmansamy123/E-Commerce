@@ -13,4 +13,9 @@
     <string name="btn_forgetPassword">Forgot Password?</string>
     <string name="have_a_account_msg">Don’t have a account?</string>
     <string name="register">Register</string>
+    <string name="loading">Loading\n</string>
+    <string name="ok">OK</string>
+    <string name="retry">Retry</string>
+    <string name="google_sign_in_failed_msg">"Google sign in failed, please retry again later. "</string>
+    <string name="generic_error_msg">Error Please tray again later.</string>
 </resources>

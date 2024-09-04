@@ -24,5 +24,9 @@ class UserDataStoreRepositoryImpl(private var context: UserPreferencesDataSource
         TODO("Not yet implemented")
     }
 
+    override fun saveUSerEmail(email: String) {
+        TODO("Not yet implemented")
+    }
+
 
 }

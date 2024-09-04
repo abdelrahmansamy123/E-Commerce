@@ -12,7 +12,20 @@
           "package_name": "com.training.ecommerce"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "610251104263-6n5so1rsgervicuh5mh2fmc8fq4ttb79.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.training.ecommerce",
+            "certificate_hash": "6be03faf2dbb1d59794229fa1dc8e67f1d0c1e38"
+          }
+        },
+        {
+          "client_id": "610251104263-dmto7ihuh23fpg6h7a1cnjmq87c5peg0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDr4eAN3y5M3bC9kSGwY0JjtRJFqA6uXaQ"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "610251104263-dmto7ihuh23fpg6h7a1cnjmq87c5peg0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

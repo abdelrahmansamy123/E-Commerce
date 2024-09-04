@@ -29,6 +29,13 @@ android {
                 "proguard-rules.pro"
             )
         }
+        forEach {
+            it.buildConfigField(
+                "String",
+                "clientServerId",
+                "\"610251104263-dmto7ihuh23fpg6h7a1cnjmq87c5peg0.apps.googleusercontent.com\""
+            )
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -41,6 +48,7 @@ android {
     buildFeatures {
         dataBinding = true
         viewBinding = true
+        buildConfig = true
     }
 }
 

@@ -9,4 +9,5 @@ interface UserPreferencesRepository {
     suspend fun saveUserID(userId: String)
 
     fun getUserID(): Flow<String?>
+    fun saveUSerEmail(email: String)
 }
