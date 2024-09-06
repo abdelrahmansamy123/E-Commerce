@@ -72,6 +72,9 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:21.2.0")
     implementation("com.facebook.android:facebook-login:16.0.0")
 
+    //facebook
+    implementation("com.facebook.android:facebook-android-sdk:16.0.0")
+
     //third party lib
     implementation("com.github.pwittchen:reactivenetwork-rx2:3.0.8")
 

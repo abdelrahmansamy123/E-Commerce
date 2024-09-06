@@ -5,8 +5,6 @@ import kotlinx.coroutines.flow.Flow
 
 class UserDataStoreRepositoryImpl(private var context: UserPreferencesDataSource) :
     UserPreferencesRepository {
-
-
     //write to DataStore
     override suspend fun saveLoginState(isLoggedIn: Boolean) {
 
@@ -27,6 +25,4 @@ class UserDataStoreRepositoryImpl(private var context: UserPreferencesDataSource
     override fun saveUSerEmail(email: String) {
         TODO("Not yet implemented")
     }
-
-
 }
