@@ -1,5 +1,6 @@
 package com.training.ecommerce.ui.auth.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -32,6 +38,9 @@ import kotlinx.coroutines.launch
 
 
 class LoginFragment : Fragment() {
+
+    private val callbackManager: CallbackManager by lazy { CallbackManager.Factory.create() }
+    private val loginManager: LoginManager by lazy { LoginManager.getInstance() }
 
     val progressDialog by lazy { ProgressDialog.createProgressDialog(requireActivity()) }
 
@@ -67,6 +76,9 @@ class LoginFragment : Fragment() {
         binding.googleBtn.setOnClickListener {
             loginWithGoogle()
         }
+        binding.facebookBtn.setOnClickListener {
+            loginWithFacebook()
+        }
     }
 
     //ActivityResultLauncher for the sign-in intent
@@ -94,10 +106,38 @@ class LoginFragment : Fragment() {
 
     }
 
+    private fun loginWithFacebook() {
+        loginManager.registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+            override fun onSuccess(result: LoginResult) {
+                val token = result.accessToken.token
+                firebaseAuthWithFacebook(token)
+            }
+
+            override fun onCancel() {
+                TODO("Not yet implemented")
+            }
+
+            override fun onError(error: FacebookException) {
+                val msg = error.message ?: getString(R.string.generic_error_msg)
+                view?.showSnakeBarError(msg)
+                logAuthIssueToCrashlytics(msg, "Facebook")
+            }
+        })
+        loginManager.logInWithReadPermissions(
+            this,
+            callbackManager,
+            listOf("email", "pubic_profile")
+        )
+
+
+    }
+
+
     private fun handleSignInResult(completeTask: Task<GoogleSignInAccount>) {
         try {
             val account = completeTask.getResult(ApiException::class.java)
             firebaseAuthWithGoogle(account.idToken!!)
+            firebaseAuthWithFacebook(account.idToken!!)
 
         } catch (e: Exception) {
             //Sign in was unsuccessfully
@@ -117,6 +157,10 @@ class LoginFragment : Fragment() {
 
     private fun firebaseAuthWithGoogle(idToken: String) {
         loginViewModel.loginWithGoogle(idToken)
+    }
+
+    private fun firebaseAuthWithFacebook(idToken: String) {
+        loginViewModel.loginWithFacebook(idToken)
     }
 
 
@@ -152,6 +196,11 @@ class LoginFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        callbackManager.onActivityResult(resultCode, resultCode, data)
     }
 
     companion object {

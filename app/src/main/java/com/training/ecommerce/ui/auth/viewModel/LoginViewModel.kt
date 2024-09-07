@@ -72,6 +72,20 @@ class LoginViewModel(
         }.launchIn(viewModelScope)
 
     }
+
+    fun loginWithFacebook(idToken: String) = viewModelScope.launch {
+        authFirebaseAuthRepository.loginWithFacebook(idToken).onEach { res ->
+            when (res) {
+                is Resource.Success -> {
+                    _loginState.emit(Resource.Success(res.data ?: "Empty User ID"))
+                }
+
+                else -> _loginState.emit(res)
+            }
+        }.launchIn(viewModelScope)
+
+    }
+
 }
 
 class LoginViewModelFactory(

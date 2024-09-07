@@ -35,7 +35,23 @@ android {
                 "clientServerId",
                 "\"610251104263-dmto7ihuh23fpg6h7a1cnjmq87c5peg0.apps.googleusercontent.com\""
             )
+            it.resValue(
+                "string",
+                "facebook_app_id",
+                "\"996344138959108\""
+            )
+            it.resValue(
+                "string",
+                "fb_login_protocol_scheme",
+                "\"fb996344138959108\""
+            )
+            it.resValue(
+                "string",
+                "facebook_client_token",
+                "\"91f40b5adcfeeb029643c2df6d442ac3\""
+            )
         }
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -71,8 +87,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.android.gms:play-services-auth:21.2.0")
     implementation("com.facebook.android:facebook-login:16.0.0")
-
-    //facebook
+    //login with facebook
     implementation("com.facebook.android:facebook-android-sdk:16.0.0")
 
     //third party lib
