@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.facebook.AccessToken
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -23,14 +24,12 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.training.ecommerce.BuildConfig
 import com.training.ecommerce.R
-import com.training.ecommerce.data.dataSource.dataStore.UserPreferencesDataSource
 import com.training.ecommerce.data.models.Resource
-import com.training.ecommerce.data.repository.auth.FirebaseAuthRepositoryImpl
-import com.training.ecommerce.data.repository.user.UserDataStoreRepositoryImpl
 import com.training.ecommerce.databinding.FragmentLoginBinding
 import com.training.ecommerce.ui.auth.viewModel.LoginViewModel
 import com.training.ecommerce.ui.auth.viewModel.LoginViewModelFactory
 import com.training.ecommerce.ui.common.views.ProgressDialog
+import com.training.ecommerce.ui.home.MainActivity
 import com.training.ecommerce.ui.showSnakeBarError
 import com.training.ecommerce.utils.CrashlyticsUtils
 import com.training.ecommerce.utils.LoginException
@@ -45,13 +44,7 @@ class LoginFragment : Fragment() {
     val progressDialog by lazy { ProgressDialog.createProgressDialog(requireActivity()) }
 
     private val loginViewModel: LoginViewModel by viewModels {
-        LoginViewModelFactory(
-            userPrefs = UserDataStoreRepositoryImpl(
-                UserPreferencesDataSource(
-                    requireActivity()
-                )
-            ), authFirebaseAuthRepository = FirebaseAuthRepositoryImpl()
-        )
+        LoginViewModelFactory(contextValue = requireContext())
     }
 
     private var _binding: FragmentLoginBinding? = null
@@ -77,7 +70,11 @@ class LoginFragment : Fragment() {
             loginWithGoogle()
         }
         binding.facebookBtn.setOnClickListener {
-            loginWithFacebook()
+            if (isLoggedIn()) {
+                signOut()
+            } else {
+                loginWithFacebook()
+            }
         }
     }
 
@@ -166,31 +163,35 @@ class LoginFragment : Fragment() {
 
     private fun initViewModel() {
         lifecycleScope.launch {
-            loginViewModel.loginState.collect { state ->
+            loginViewModel.loginState.collect { resource ->
+                when (resource) {
+                    is Resource.Loading -> {
+                        progressDialog.show()
+                    }
 
-                state.let {
-                    when (it) {
-                        is Resource.Loading -> {
-                            progressDialog.show()
-                        }
+                    is Resource.Success -> {
+                        progressDialog.dismiss()
+                        goToHome()
+                    }
 
-                        is Resource.Success -> {
-                            progressDialog.dismiss()
+                    is Resource.Error -> {
+                        progressDialog.dismiss()
+                        val msg =
+                            resource.exception?.message ?: getString(R.string.generic_error_msg)
 
-                        }
-
-                        is Resource.Error -> {
-                            progressDialog.dismiss()
-                            val msg = it.exception?.message ?: getString(R.string.generic_error_msg)
-                            view?.showSnakeBarError(
-                                it.exception?.message ?: getString(R.string.generic_error_msg)
-                            )
-                            logAuthIssueToCrashlytics(msg, "Login Error")
-                        }
+                        view?.showSnakeBarError(msg)
+                        logAuthIssueToCrashlytics(msg, "Login Error")
                     }
                 }
             }
         }
+    }
+
+    private fun goToHome() {
+        requireActivity().startActivity(Intent(activity, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        })
+        requireActivity().finish()
     }
 
     override fun onDestroyView() {
@@ -198,9 +199,18 @@ class LoginFragment : Fragment() {
         _binding = null
     }
 
+    private fun isLoggedIn(): Boolean {
+        val accessToken = AccessToken.getCurrentAccessToken()
+        return accessToken != null && !accessToken.isExpired
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         callbackManager.onActivityResult(resultCode, resultCode, data)
+    }
+
+    private fun signOut() {
+        loginManager.logOut()
     }
 
     companion object {

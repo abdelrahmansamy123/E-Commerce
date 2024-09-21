@@ -13,5 +13,8 @@ buildscript {
 
     dependencies {
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.7.7")
+        classpath("com.google.android.gms:oss-licenses-plugin:0.10.6") {
+            exclude(group = "com.google.protobuf")
+        }
     }
 }
