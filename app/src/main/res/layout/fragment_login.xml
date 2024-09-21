@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="com.training.ecommerce.ui.auth.viewModel.LoginViewModel" />
+
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:src="@drawable/ic_logo" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/titleTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/auth_welcome_msg" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                style="@style/messageTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/sign_in_msg" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edt_email"
+                style="@style/EditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="36dp"
+                android:drawableStart="@drawable/ic_email"
+                android:hint="@string/email_edt_hint"
+                android:inputType="textEmailAddress"
+                android:text="@={vm.email}" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edt_password"
+                style="@style/EditTextStyle"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="8dp"
+                android:drawableStart="@drawable/password_ic"
+                android:hint="@string/password_edt_hint"
+                android:inputType="textPassword"
+                android:text="@={vm.password}" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/login_btn"
+                style="@style/PrimaryButtonStyle"
+                android:layout_marginTop="16dp"
+                android:onClickListener="@{() -> vm.login()}"
+                android:text="@string/btn_login"
+
+                />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp">
+
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:layout_centerInParent="true"
+                    android:background="@color/neutralGray" />
+
+                <TextView
+                    android:layout_width="60dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:background="@color/white"
+                    android:fontFamily="@font/poppins_bold"
+                    android:gravity="center"
+                    android:text="@string/or"
+                    android:textAllCaps="true"
+                    android:textColor="@color/neutralGray" />
+            </RelativeLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/google_btn"
+                style="@style/SocialButtonStyle"
+                android:drawableStart="@drawable/ic_google"
+                android:text="@string/btn_google" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/facebook_btn"
+                style="@style/SocialButtonStyle"
+                android:layout_marginTop="8dp"
+                android:drawableStart="@drawable/ic_facebook"
+                android:text="@string/btn_facebook" />
+
+            <TextView
+                style="@style/MediumPrimaryTextViewStyle"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="@string/btn_forgetPassword" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    style="@style/messageTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/have_a_account_msg" />
+
+                <TextView
+                    style="@style/MediumPrimaryTextViewStyle"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/register" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</layout>
