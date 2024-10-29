@@ -1,12 +1,12 @@
 package com.training.ecommerce.data.repository.user
 
+import com.training.ecommerce.data.models.user.UserDetailsPreferences
 import kotlinx.coroutines.flow.Flow
 
 interface UserPreferencesRepository {
-    suspend fun isUserLoggedIn(): Flow<Boolean>
-    suspend fun saveLoginState(isLoggedIn: Boolean)
-    suspend fun saveUserID(userId: String)
-
-    fun getUserID(): Flow<String?>
-    fun saveUSerEmail(email: String)
+    fun getUserDetails(): Flow<UserDetailsPreferences>
+    suspend fun updateUserId(userId: String)
+    suspend fun getUserId(): Flow<String>
+    suspend fun clearUserPreferences()
+    suspend fun updateUserDetails(userDetailsPreferences: UserDetailsPreferences)
 }
