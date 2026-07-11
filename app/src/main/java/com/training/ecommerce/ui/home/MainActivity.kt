@@ -42,8 +42,9 @@ class MainActivity : AppCompatActivity() {
     private fun initViewModel() {
         lifecycleScope.launch {
             val userDetails = runBlocking { userViewModel.getUserDetails().first() }
+            Log.d(TAG, "initViewModel: user details ${userDetails.email}")
             userViewModel.userDetailsState.collect {
-
+                Log.d(TAG, "initViewModel: user details updated ${it?.email}")
             }
 
         }

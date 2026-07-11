@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class UserPreferenceRepositoryImpl(private val context: Context) : UserPreferencesRepository {
+
     override fun getUserDetails(): Flow<UserDetailsPreferences> {
         return context.userDetailsDataStore.data
     }

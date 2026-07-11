@@ -22,6 +22,7 @@ import com.training.ecommerce.utils.CrashlyticsUtils
 import com.training.ecommerce.utils.CrashlyticsUtils.LISTEN_TO_USER_DETAILS
 import com.training.ecommerce.utils.UserDetailsException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
@@ -36,6 +37,7 @@ class UserViewModel(
     private val userFirestoreRepository: UserFirestoreRepository,
     private val firebaseAuthRepository: FirebaseAuthRepository
 ) : ViewModel() {
+    private val logoutState = MutableSharedFlow<Resource<Unit>>()
 
     // load user data in state flow inside view model  scope
     val userDetailsState = getUserDetails().stateIn(
@@ -61,6 +63,7 @@ class UserViewModel(
             CrashlyticsUtils.sendCustomLogToCrashlytics<UserDetailsException>(
                 msg, LISTEN_TO_USER_DETAILS to msg
             )
+            if (e is UserDetailsException) logOut()
         }.collectLatest { resource ->
             Log.d(TAG, "listenToUserDetails: ${resource.data}")
             when (resource) {
@@ -84,6 +87,7 @@ class UserViewModel(
         firebaseAuthRepository.logout()
         userPreferencesRepository.clearUserPreferences()
         appPreferencesRepository.saveLoginState(false)
+        logoutState.emit(Resource.Success(Unit))
     }
 
     companion object {
