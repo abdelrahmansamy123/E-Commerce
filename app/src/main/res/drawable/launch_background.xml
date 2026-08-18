@@ -5,6 +5,6 @@
         android:width="150dp"
         android:height="150dp"
         android:drawable="@drawable/ic_launcher"
-        android:gravity="center" />
+        android:gravity="center|bottom" />
 </layer-list>
 
